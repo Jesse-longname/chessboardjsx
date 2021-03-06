@@ -2,9 +2,8 @@ import React, { Component } from 'react';
 import Board from './Board';
 import PropTypes from 'prop-types';
 import isEqual from 'lodash.isequal';
-import { DragDropContext } from 'react-dnd';
-import MultiBackend from 'react-dnd-multi-backend';
-import HTML5toTouch from 'react-dnd-multi-backend/lib/HTML5toTouch';
+import { DndProvider } from 'react-dnd';
+import { HTML5toTouch } from 'rdndmb-html5-to-touch';
 
 import SparePieces from './SparePieces';
 import {
@@ -16,6 +15,7 @@ import {
 import CustomDragLayer from './CustomDragLayer';
 import defaultPieces from './svg/chesspieces/standard';
 import ErrorBoundary from './ErrorBoundary';
+import { MultiBackend } from 'react-dnd-multi-backend';
 
 const ChessboardContext = React.createContext();
 
@@ -431,6 +431,7 @@ class Chessboard extends Component {
 
     return (
       <ErrorBoundary>
+      <DndProvider backend={MultiBackend} options={HTML5toTouch}>
         <ChessboardContext.Provider
           value={{
             ...this.props,
@@ -468,9 +469,10 @@ class Chessboard extends Component {
             sourceSquare={targetSquare}
           />
         </ChessboardContext.Provider>
+      </DndProvider>
       </ErrorBoundary>
     );
   }
 }
 
-export default DragDropContext(MultiBackend(HTML5toTouch))(Chessboard);
+export default Chessboard;
